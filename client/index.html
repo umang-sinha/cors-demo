@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student</title>
+  </head>
+  <body>
+    <input type="text" id="textField1" placeholder="Student ID" />
+    <input type="text" id="textField2" placeholder="Student name" />
+    <button onclick="addStudent()">Add student</button><br /><br />
+
+    <input type="text" id="textField3" placeholder="Student ID to delete" />
+    <button onclick="deleteStudent()">Delete student</button><br /><br />
+
+    <input type="text" id="textField4" placeholder="Get student" />
+    <button onclick="getStudent()">Get student</button><br /><br />
+
+    <script>
+      let apiUrl = "http://127.0.0.1:3000";
+
+      function addStudent() {
+        let studentId = document.getElementById("textField1").value;
+        let studentName = document.getElementById("textField2").value;
+
+        fetch(apiUrl + "/add-student", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name: studentName, id: studentId }),
+        }).then((response) => {
+          if (response.status === 200) {
+            console.log(response);
+          } else {
+            const div = document.createElement("div");
+            div.innerText = "Something went wrong";
+            document.body.appendChild(div);
+          }
+        });
+      }
+
+      function deleteStudent() {
+        let idToDelete = document.getElementById("textField3").value;
+
+        fetch(apiUrl + "/delete-student", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id: idToDelete }),
+        }).then((response) => {
+          if (response.status === 200) {
+            console.log(response);
+          } else {
+            const div = document.createElement("div");
+            div.innerText = "Something went wrong";
+            document.body.appendChild(div);
+          }
+        });
+      }
+
+      function getStudent() {
+        let idToSearch = document.getElementById("textField4").value;
+        fetch(apiUrl + "/get-student" + "?id=" + idToSearch, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then((response) => {
+          if (response.status === 200) {
+            console.log(response);
+          } else {
+            const div = document.createElement("div");
+            div.innerText = "Something went wrong";
+            document.body.appendChild(div);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
